@@ -170,7 +170,7 @@
           var ids = properties.nodes;
 
           try{
-            var clickedNodes = nodes.get(ids);
+            var clickedNodes = nodes_.get(ids);
             var node_id = clickedNodes[0].id;
             console.log('clicked node:', node_id);
             document.getElementById("clusterimage").style.display = "block";
@@ -190,11 +190,11 @@
         var ids_edge = properties.edges;
 
         try{
-          var clickedEdges = edges.get(ids_edge);
+          var clickedEdges = edges_.get(ids_edge);
           var edge_id = clickedEdges[0].id;
           console.log('clicked edge:', edge_id);
 
-          let my_edge = edges.get({
+          let my_edge = edges_.get({
             filter: function (item) {return String(item.id) === String(edge_id);}
           });
           console.log(my_edge);
@@ -212,9 +212,7 @@
           console.log(err);
         }
       });
-
       return network;
-
     }
 
     drawGraph(nodes, edges, 0.3);
@@ -265,15 +263,12 @@
         }else{
 
           let nodes_show = new Set();
-
           //let jsondata = JSON.parse(edges_icon);
           //console.log(jsondata.edges)
           //console.log(jsondata.edges);
           /*var json = $.getJSON("data.json").done(function(data){
             edges_icon: data.edges
           });*/
-
-
           console.log(edges_icon)
 
           let keep_edges = edges_icon.get({
