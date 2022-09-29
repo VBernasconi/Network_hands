@@ -132,7 +132,8 @@
           },
           "edges": {
               "color": {
-                  "inherit": true
+                  "inherit": true,
+                  "opacity": 0.2,
               },
               "smooth": {
                   "enabled": false,
@@ -175,6 +176,13 @@
             console.log('clicked node:', node_id);
             document.getElementById("clusterimage").style.display = "block";
             document.getElementById("clusterimage").src = "SPECTRAL_kmeans_clustering/tSNE-grid-allimages_"+node_id+".jpg";
+            //var hide_edges = hideEdges(node_id);
+            //console.log("HIDE EDGES")
+            //TODO : setup the opacity to low before and hihglight edges on click of node
+            /*for (const edge of hide_edges){
+              console.log(edge.id);
+              edges_.update([{id: edge.id, color: {opacity: 0.2, inherit:false}}]);
+            }*/
           }catch(err){
             console.log("No node selected");
           }
@@ -215,6 +223,24 @@
       return network;
     }
 
+    function hideEdges(node_id){
+      let hide_edges = edges_icon.get({
+        filter: function (item) {
+          from_ = item.from
+          to_ = item.to
+          my_label = String(item.title);
+          if (item.from === node_id) {
+            return false;
+          } else if (item.to === node_id) {
+            return false;
+          } else {
+            return true;
+          }
+        }
+      });
+      return hide_edges;
+    }
+
     drawGraph(nodes, edges, 0.3);
 
     var edge_name = [];
@@ -224,8 +250,6 @@
     for (const edge of edge_names_) {
       edge_name.indexOf(edge.title) === -1 ? edge_name.push(edge.title) : null;
     }
-
-    console.log(edge_name);
 
     // generate the radio groups
     const group = document.querySelector("#group");
