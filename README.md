@@ -10,3 +10,5 @@ The overall process:
 - One painting = one iconography = a set of clusters working together narratively
 - Nodes are clusters
 - Edges are their corresponding iconography under which hands are grouped to express something visually
+
+![Building a network of hands](network_hand.png)
