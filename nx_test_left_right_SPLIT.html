@@ -1,0 +1,245 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script>
+
+    <script type="text/javascript" src="network_SPLIT/nodes_edges_left.js"></script>
+    <script type="text/javascript" src="network_SPLIT/nodes_edges_right.js"></script>
+    <script type="text/javascript" src="network_SPLIT/edges_icon.js"></script>
+
+    <script type="text/javascript" src="network_SPLIT/network_handler.js"></script>
+
+  <!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+  <script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+    <style type="text/css">
+      .mynetwork {
+          width: 100%;
+          height: 1080px;
+          background-color: #222222;
+          border: 0px solid lightgray;
+          position: relative;
+          float: left;
+      }
+      /* The sidebar menu */
+      .sidebar {
+        height: 100%; /* 100% Full-height */
+        width: 0; /* 0 width - change this with JavaScript */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Stay on top */
+        top: 0;
+        left: 0;
+        background-color: rgba(255, 255, 255, 0.3);/*background-color: #111; /* Black*/
+        overflow-x: hidden; /* Disable horizontal scroll */
+        padding-top: 60px; /* Place content 60px from the top */
+        transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+      }
+
+      /* The sidebar links */
+      .sidebar a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+      }
+
+      /* When you mouse over the navigation links, change their color */
+      .sidebar a:hover {
+        color: #f1f1f1;
+      }
+
+      /* Position and style the close button (top right corner) */
+      .sidebar .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+      }
+
+      /* The button used to open the sidebar */
+      .openbtn {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        font-size: 20px;
+        cursor: pointer;
+        background-color: #111;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+      }
+
+      .openbtn:hover {
+        background-color: #444;
+      }
+
+      /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+      .mynetwork {
+        transition: margin-left .5s; /* If you want a transition effect */
+        /*padding: 20px;*/
+      }
+
+      .clusterimage{
+        bottom:0;
+        right: 0;
+        z-index: 1;
+        position: fixed;
+        max-width: 2000px;
+        transition: 0.5s;
+        display: none;
+      }
+
+      /*.split {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .gutter {
+        cursor: e-resize;
+        background-color: grey;
+        height: grey;
+      }*/
+
+      .split {
+          -webkit-box-sizing: border-box;
+          -moz-box-sizing: border-box;
+          box-sizing: border-box;
+          /*overflow-y: auto;*/
+          overflow-x: hidden;
+      }
+
+      /*.content {
+          border: 1px solid #C0C0C0;
+          box-shadow: inset 0 1px 2px #e4e4e4;
+          background-color: #fff;
+      }*/
+
+      .gutter {
+          background-color: transparent;
+          background-repeat: no-repeat;
+          background-position: 50%;
+      }
+
+      .gutter.gutter-horizontal {
+          cursor: col-resize;
+      }
+
+      .gutter.gutter-vertical {
+          cursor: row-resize;
+      }
+
+      .split.split-horizontal,
+      .gutter.gutter-horizontal {
+          height: 100%;
+          float: left;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+    <button class="openbtn" onclick="openNav()">&#9776; Iconography</button>
+    <div>
+      <div id="left_" calss="split split-horizontal">
+        <div id = "mynetwork_left" class="mynetwork"></div>
+      </div>
+      <div id="right_" class="split split-horizontal">
+        <div id = "mynetwork_right" class="mynetwork"></div>
+      </div>
+    </div>
+    <div id="mySidebar" class="sidebar">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <div id="group" style="z-index : 50; position:absolute; left:20; top:50; color: white; width: 500px; height: 800px; overflow-y: scroll;"></div>
+    </div>
+
+        <img id="clusterimage_left" class="clusterimage" src=""/>
+
+        <img id="clusterimage_right" class="clusterimage" src=""/>
+
+    </div>
+
+    <script type="text/javascript">
+      //SPLIT
+      Split(['#left_', '#right_'], {
+        gutterSize: 8,
+        cursor: 'col-resize'
+      })
+
+      var network_left = new Iconetwork(nodes_left, edges_left, edges_left, 0.3, "mynetwork_left", "clusterimage_left");//new Iconetwork(nodes_left, edges_left, edges_icon, 0.3, "mynetwork_left", "clusterimage_left");
+      var network_right = new Iconetwork(nodes_right, edges_right, edges_right, 0.3, "mynetwork_right", "clusterimage_right");
+
+      network_left.drawGraph();
+      network_right.drawGraph();
+
+      handleEdges(nodes_left, edges_left);
+      //SIDE BAR
+      /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+      function openNav() {
+        document.getElementById("mySidebar").style.width = "500px";
+        //document.getElementById("main").style.marginLeft = "250px";
+      }
+      /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
+      function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        //document.getElementById("main").style.marginLeft = "0";
+      }
+      //HANDLE SELECTION
+      function handleEdges(nodes, edges){
+        var edge_name = [];
+
+        var edge_names_ =  edges.get({fields: ['title']})
+
+        for (const edge of edge_names_) {
+          edge_name.indexOf(edge.title) === -1 ? edge_name.push(edge.title) : null;
+        }
+
+        // generate the radio groups
+        const group = document.querySelector("#group");
+
+        group.innerHTML = edge_name.map((edge) => `<div>
+                <input type="checkbox" name="edge" value="${edge}" id="${edge}">
+                 <label for="${edge}">${edge}</label>
+            </div>`).join(' ');
+
+        group.innerHTML += '<div> <input type="checkbox" name="edge" value="all" id="all"><label for="all">all</label> </div>';
+        // add an event listener for the change event
+        const radioButtons = document.querySelectorAll('input[name="edge"]');
+
+        for(const radioButton of radioButtons){
+            radioButton.addEventListener('change', this.showSelected);
+        }
+        return 0;
+      }
+
+      function showSelected(e) {
+
+          let checkboxes = document.querySelectorAll('input[name="edge"]:checked');
+          let values = [];
+          checkboxes.forEach((checkbox) => {
+              values.push(String(checkbox.value));
+          });
+          console.log(values);
+          let check_value = String(this.value);
+          //allNodes = this.nodes.get({ returnType: "Object" });
+
+          if (check_value === 'all') {
+            network_left.drawGraph(0.3);
+            network_right.drawGraph(0.3);
+          }else{
+            network_left.iconographyUpdate(values);
+            network_right.iconographyUpdate(values);
+
+            //this.handleEdges(nodes, edges);
+        }
+      }
+
+    </script>
+  </body>
+</html>
